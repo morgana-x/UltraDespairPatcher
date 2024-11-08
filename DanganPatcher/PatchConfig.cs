@@ -24,7 +24,7 @@ namespace DanganPatcher
             }
             foreach (var a in Patches)
             {
-                a.PatchGroup = this;
+                a.setPatchGroup(this);
                 Console.WriteLine($"Patching {a.Name}");
                 patcher.Patch(a);
             }

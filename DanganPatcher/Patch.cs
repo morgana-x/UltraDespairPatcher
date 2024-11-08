@@ -10,7 +10,7 @@ namespace DanganPatcher
 
         public int PatchOffset { get; set; }
 
-        public PatchGroup PatchGroup { get; set; }
+        private PatchGroup PatchGroup;
 
         public Patch(string patchName, string signaturePattern, string replacement, int offset = 0, Dictionary<string, string> options = null, string description = "Dummy Description")
         {
@@ -21,6 +21,10 @@ namespace DanganPatcher
         }
         public Patch()
         { 
+        }
+        public void setPatchGroup(PatchGroup group)
+        {
+            PatchGroup = group;
         }
         public string getReplacement()
         {
