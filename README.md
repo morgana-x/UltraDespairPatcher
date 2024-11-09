@@ -9,7 +9,7 @@ Patches can only be applied once each time the game runs, if you make an edit to
 
 # Featured Patches
 + Komaru Swag
-  + Customise what outfit komaru uses (guess)
+  + Customise what outfit komaru uses
 + Infinite Ammo
 + God mode / No Damage (Damage animation still plays for coolness)
 + Infinite Battery
