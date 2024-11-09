@@ -93,7 +93,6 @@ namespace DanganPatcher
                 Enabled = true,
                 Patches = new List<Patch>()
                 {
-                    //new Patch("DepleteBattery", "f3 0f 5c c8 f3 0f 11 0d 85 01 76 00 e9 2e 01 00 00 8b 05 f6 28 79 00 48 8b 1d 7f 2a 79 00 0f ba e0 1c 72 6a f6 05 f2 00 76 00 04 75 42", "90 90 90 90"),
                     new Patch("DepleteBattery2", "f3 0f 5c c8 f3 0f 11 0d 24 01 76 00 eb 27 a9 00 00 c0 00 75 18 e8 02 0f 04 00 44 89 35 0f 01 76 00 0f b7 c8 66 89 05 01 01 76 00", "90 90 90 90")
                 }
             }

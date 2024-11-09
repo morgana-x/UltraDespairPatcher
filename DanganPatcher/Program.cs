@@ -4,13 +4,32 @@ using System.Diagnostics;
 public partial class Program
 {
     static string steamappid = "555950";
+
+    static bool startGameExe()
+    {
+        if (Process.GetProcessesByName("game").Length > 0)
+            return true;
+        Program.PrintFancy(ConsoleColor.Cyan, "game.exe not detected, starting manually...");
+        Process.Start("explorer", $"steam://run/{steamappid}");
+        int attempt = 0;
+        while (Process.GetProcessesByName("game").Length == 0)
+        {
+            attempt++;
+            if (attempt > 10)
+                return false;
+            Thread.Sleep(1000);
+        }
+        return true;
+    }
+
     public static void Main(string[] args)
     {
         Console.WriteLine("hello!");
-        while (Process.GetProcessesByName("game").Length == 0)
+        if (!startGameExe())
         {
-            Console.WriteLine("You need to have the game open to use this patcher!");
-            Thread.Sleep(500);
+            Console.WriteLine("Failed to start patcher, game was not open, and could not launch game");
+            Console.ReadLine();
+            return;
         }
         Process proc = Process.GetProcessesByName("game")[0];
         Patcher patcher = new Patcher(proc);
