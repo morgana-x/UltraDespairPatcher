@@ -12,3 +12,5 @@ Patches can only be applied once each time the game runs, if you make an edit to
   + Customise what outfit komaru uses (guess)
 + Infinite Ammo
 + God mode / No Damage (Damage animation still plays for coolness)
++ Infinite Battery
++ 1 HP patch
