@@ -39,7 +39,7 @@ namespace DanganPatcher
 
             if (!result.Found)
             {
-                Program.PrintFancy(ConsoleColor.Yellow, $"Unable to find pattern \"{name}\"! ({pattern})");
+               // Program.PrintFancy(ConsoleColor.Yellow, $"Unable to find pattern \"{name}\"! ({pattern})");
                 return 0;
             }
             return baseAddress + result.Offset;

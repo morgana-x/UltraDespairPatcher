@@ -68,17 +68,53 @@ namespace DanganPatcher
             {
                 Name = "God mode",
                 Description = "Komaru doesn't take damage no more!",
-                Enabled = true,
+                Enabled = false,
                 Patches = new List<Patch>()
                 {
                     new Patch("TakeDamage", "66 2b 86 58 05 00 00 66 89 05 35 90 76 00 79 0a 41 8b c6 66 89 05 29 90 76 00 0f b7 c8 e8 93 e9 06 00", "90 90 90 90 90 90 90")
                 }
+            },
+            new PatchGroup()
+            {
+                Name = "1 Heart",
+                Description = "Komaru has a max health of 1 heart.",
+                Enabled = true,
+                Patches = new List<Patch>()
+                {
+                    new Patch("GetMaxHealth", "66 41 03 d0 41 f6 c1 04 74 06 8b 88 a4", "B8 01 00 00 00", 16),
+                    new Patch("SetDefaultHealth", "66 41 03 c8 41 f6 c1 04 74 06 8b 82 a4 00 00 00 66 03 c1 66 89 05 7d f2 71 00 66 89 05 a6 c9 6e 00 c3", "C7 05 7A F2 71 00 01 00 00 00 90 90 90 90", 22)
+                }
+            },
+
+            new PatchGroup()
+            {
+                Name = "Infinite Battery Life (Real)",
+                Description = "Genocider Jack never runs out of battery!",
+                Enabled = true,
+                Patches = new List<Patch>()
+                {
+                    //new Patch("DepleteBattery", "f3 0f 5c c8 f3 0f 11 0d 85 01 76 00 e9 2e 01 00 00 8b 05 f6 28 79 00 48 8b 1d 7f 2a 79 00 0f ba e0 1c 72 6a f6 05 f2 00 76 00 04 75 42", "90 90 90 90"),
+                    new Patch("DepleteBattery2", "f3 0f 5c c8 f3 0f 11 0d 24 01 76 00 eb 27 a9 00 00 c0 00 75 18 e8 02 0f 04 00 44 89 35 0f 01 76 00 0f b7 c8 66 89 05 01 01 76 00", "90 90 90 90")
+                }
             }
         };
+        static string configFolder = AppDomain.CurrentDomain.BaseDirectory + "\\Config";
+        static string configPath = configFolder + "\\Patches.json";
+        private static void SaveConfig(PatchConfig config)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                AllowTrailingCommas = true,
+                IncludeFields = true
+            };
+            string serialized = JsonSerializer.Serialize<PatchConfig>(config, options);
+            File.WriteAllText(configPath, serialized);
+        }
         public static PatchConfig LoadConfig()
         {
-            string configFolder = AppDomain.CurrentDomain.BaseDirectory + "\\Config";
-            string configPath = configFolder + "\\Patches.json";
+
             if (!Directory.Exists(configFolder))
                 Directory.CreateDirectory(configFolder);
 
@@ -90,15 +126,20 @@ namespace DanganPatcher
                 AllowTrailingCommas = true,
                 IncludeFields = true
             };
-
+            var defaultConfig = new PatchConfig();
             if (!File.Exists(configPath))
             {
                 Console.WriteLine("Creating config file for first time...");
-                PatchConfig config = new PatchConfig();
+                SaveConfig(defaultConfig);
+                return defaultConfig;
+            }
 
-                string serialized = JsonSerializer.Serialize<PatchConfig>(config, options);
-                File.WriteAllText(configPath, serialized);
-                return config;
+            var config = JsonSerializer.Deserialize<PatchConfig>(File.ReadAllText(configPath), options);
+            if (config.DespairPatches.Count < defaultConfig.DespairPatches.Count)
+            {
+                for (int i = config.DespairPatches.Count; i < defaultConfig.DespairPatches.Count; i++)
+                    config.DespairPatches.Add(defaultConfig.DespairPatches[i]);
+                SaveConfig(config);
             }
             return JsonSerializer.Deserialize<PatchConfig>(File.ReadAllText(configPath), options);
         }
